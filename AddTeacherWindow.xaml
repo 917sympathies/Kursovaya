@@ -1,0 +1,16 @@
+﻿<Window x:Class="Kursovaya.AddTeacherWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Kursovaya"
+        mc:Ignorable="d"
+        Title="Добавить учителя" MinWidth="300"
+        Closing="Window_Closing"
+        WindowStartupLocation="CenterOwner"
+        IsVisibleChanged="Window_IsVisibleChanged"
+        SizeToContent="WidthAndHeight">
+    <Grid x:Name="addTeacherGrid" GotFocus="textBox_GotFocus">
+
+    </Grid>
+</Window>

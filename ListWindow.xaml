@@ -1,0 +1,28 @@
+﻿<Window x:Class="Kursovaya.ListWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Kursovaya"
+        mc:Ignorable="d"
+        Title="Список" SizeToContent="WidthAndHeight"
+        MinHeight="220" MaxWidth="400"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing"
+        IsVisibleChanged="Window_IsVisibleChanged" Activated="Window_Activated">
+    <Grid>
+        <DockPanel>
+            <Menu DockPanel.Dock="Top" Margin="10">
+                <MenuItem x:Name="update1" Header="Обновить" Click="update1_Click"/>
+                <MenuItem x:Name="file1" Header="Добавить ученика" Click="file1_Click"/>
+                <MenuItem x:Name="delete1" Header="Удалить" Visibility="Hidden" Click="delete1_Click"/>
+                <MenuItem x:Name="info1" Header="Доп.инфо" Visibility="Hidden" Click="info1_Click"/>
+            </Menu>
+            <DataGrid x:Name="dgList" Margin="10" AutoGenerateColumns="True" ColumnWidth="*" CanUserAddRows="False" IsReadOnly="True"
+                      MouseDoubleClick="dgList_MouseDoubleClick" SelectionChanged="dgList_SelectionChanged">
+            </DataGrid>
+        </DockPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,40 @@
+﻿<Window x:Class="Kursovaya.StudentInfoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Kursovaya"
+        mc:Ignorable="d"
+        Title="" SizeToContent="WidthAndHeight" MaxWidth="500"
+        ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+    <StackPanel>
+        <TextBlock x:Name="infoTextBlock" Margin="20, 20, 20, 10" FontSize="20" VerticalAlignment="Top" HorizontalAlignment="Center">
+            Оценки:
+        </TextBlock>
+        <DataGrid x:Name="marksList" Margin="10" ColumnWidth="*" MaxHeight="250">
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="firstQ" Header="1 Четверть" Binding="{Binding Quarter1, Mode=TwoWay}" Width="auto">
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="secondQ" Header="2 Четверть" Binding="{Binding Quarter2, Mode=TwoWay}" Width="auto">
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="thirdQ" Header="3 Четверть" Binding="{Binding Quarter3, Mode=TwoWay}" Width="auto">
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="fourthQ" Header="4 Четверть" Binding="{Binding Quarter4, Mode=TwoWay}" Width="auto">
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="finalMark" Header="Итоговая" Binding="{Binding Final, Mode=TwoWay}" Width="auto" IsReadOnly="True">
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <DockPanel>
+            <Button x:Name="giveMarks" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Left" DockPanel.Dock="Left" Click="giveMarks_Click">
+                Выставить итоговые оценки
+            </Button>
+            <Button x:Name="updateMarks" Margin="5,10,5,20" VerticalAlignment="Bottom" HorizontalAlignment="Center" Click="updateMarks_Click">
+                Обновить
+            </Button>
+            <Button x:Name="stopEdit" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" DockPanel.Dock="Right" Click="stopEdit_Click">
+                Сохранить изменения
+            </Button>
+        </DockPanel>
+    </StackPanel>
+</Window>
