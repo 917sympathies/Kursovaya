@@ -18,7 +18,12 @@
             </StackPanel>
         </TabItem>
         <TabItem Header="Авторизация">
-
+            <StackPanel>
+                <TextBlock Text="ВХОД" HorizontalAlignment="Center" Margin="30,30,30,0"></TextBlock>
+                <TextBox x:Name="loginTextBox" Margin="30,5,30,0"></TextBox>
+                <TextBox x:Name="passTextBox" Margin="30,5,30,0"></TextBox>
+                <Button x:Name="loginButton" Margin="30,5,30,0" Content="Войти"></Button>
+            </StackPanel>
         </TabItem>
     </TabControl>
 </Window>
