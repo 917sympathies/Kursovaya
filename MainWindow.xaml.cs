@@ -20,21 +20,26 @@ namespace Kursovaya
     /// </summary>
     public partial class MainWindow : Window
     {
-        ListWindow lWindow;
+        private ListWindow lWindow;
+        private User user;
         public MainWindow()
         {
             InitializeComponent();
-            lWindow = new ListWindow();
+            user = User.Guest;
         }
 
         private void button2_Click(object sender, RoutedEventArgs e)
         {
+            lWindow = new ListWindow(user);
+            lWindow.Owner = this;
             lWindow.Subject = ListSubject.Teacher;
             lWindow.Show();
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
+            lWindow = new ListWindow(user);
+            lWindow.Owner = this;
             lWindow.Subject = ListSubject.Student;
             lWindow.Show();
         }
@@ -43,10 +48,21 @@ namespace Kursovaya
         {
             System.Windows.Application.Current.Shutdown();
         }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            lWindow.Owner = this;
-        }
+    }
+    public enum User
+    {
+        Guest,
+        Teacher,
+        HeadTeacher
+    }
+    public enum ListSubject
+    {
+        Teacher,
+        Student
+    }
+    public interface IUser
+    {
+        public void CheckUser();
+        public User CurrentUser { get; set; }
     }
 }

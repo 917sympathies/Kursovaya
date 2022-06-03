@@ -17,23 +17,47 @@ namespace Kursovaya
     /// <summary>
     /// Interaction logic for StudentInfoWindow.xaml
     /// </summary>
-    public partial class StudentInfoWindow : Window
+    public partial class StudentInfoWindow : Window, IUser
     {
         private MyDataBase dataBase;
         private Student stud;
+
         public int Quarter1 { get; set; }
         public int Quarter2 { get; set; }
         public int Quarter3 { get; set; }
         public int Quarter4 { get; set; }
         public int Final { get; set; }
+        public User CurrentUser { get; set; }
 
-        public StudentInfoWindow(Student student)
+        public StudentInfoWindow(Student student, User user)
         {
             InitializeComponent();
             stud = student;
+            CurrentUser = user;
             dataBase = new MyDataBase();
+            CheckUser();
         }
-
+        public void CheckUser()
+        {
+            if (CurrentUser == User.Guest)
+            {
+                marksList.IsReadOnly = true;
+                giveMarks.Visibility = Visibility.Hidden;
+                stopEdit.Visibility = Visibility.Hidden;
+            }
+            else if(CurrentUser == User.Teacher)
+            {
+                marksList.IsReadOnly = false;
+                giveMarks.Visibility = Visibility.Hidden;
+                stopEdit.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                marksList.IsReadOnly = false;
+                giveMarks.Visibility = Visibility.Visible;
+                stopEdit.Visibility = Visibility.Visible;
+            }
+        }
         private void FillDataGrid()
         {
             for (int i = 0; i < dataBase.subjects.Count(); i++)
@@ -60,20 +84,19 @@ namespace Kursovaya
                 TextBlock idTb = idCell.Content as TextBlock;
                 int subjID = int.Parse(idTb.Text);
                 var marks = dataBase.marks.Where(w => w.StudentId == stud.Id && w.SubjectId == subjID && w.Quarter <= 4).ToArray();
-                //var test = dataBase.marks.FirstOrDefault(w => w.StudentId == stud.Id && w.SubjectId == subjID && w.Quarter == 5 && w.Value != 0);
                 if (marks.Length < 4 || dataBase.marks.Where(w => w.StudentId == stud.Id && w.SubjectId == subjID && w.Quarter <= 4 && w.Value == 0).Count() != 0)
                 {
                     var subject = dataBase.subjects.Find(subjID);
                     MessageBox.Show($"Недостаточно оценок для выведения итоговой оценки по предмету {subject.Name}!");
                     continue;
                 }
-                else if(dataBase.marks.FirstOrDefault(w => w.StudentId == stud.Id && w.SubjectId == subjID && w.Quarter == 5 && w.Value != 0) != null)
+                else if (dataBase.marks.FirstOrDefault(w => w.StudentId == stud.Id && w.SubjectId == subjID && w.Quarter == 5 && w.Value != 0) != null)
                 {
                     var subject = dataBase.subjects.Find(subjID);
                     if (MessageBox.Show($"Оценка по предмету {subject.Name} уже выведена! Желаете вывести заного?", "Оценка уже выведена", MessageBoxButton.YesNo) == MessageBoxResult.No) return;
                 }
                 double finalMark = 0;
-                foreach(var t in marks)
+                foreach (var t in marks)
                 {
                     finalMark += t.Value;
                 }

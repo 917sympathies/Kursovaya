@@ -18,16 +18,19 @@ namespace Kursovaya
     /// <summary>
     /// Interaction logic for TeacherInfoWindow.xaml
     /// </summary>
-    public partial class TeacherInfoWindow : Window
+    public partial class TeacherInfoWindow : Window, IUser
     {
-        Teacher teacher;
-        Subject selectedSubject;
-        MyDataBase dataBase;
-        SubjectsWindow subjectsWindow;
-        public TeacherInfoWindow(Teacher teacher)
+        private Teacher teacher;
+        private Subject selectedSubject;
+        private MyDataBase dataBase;
+        private SubjectsWindow subjectsWindow;
+        public User CurrentUser { get; set; }
+        public TeacherInfoWindow(Teacher teacher, User user)
         {
             InitializeComponent();
             this.teacher = teacher;
+            CurrentUser = user;
+            CheckUser();
             LoadSubjects();
         }
 
@@ -91,6 +94,20 @@ namespace Kursovaya
             var idToFind = int.Parse(subjectsList.SelectedItem.ToString().Split(',')[0].Split(' ').Last());
             dataBase = new MyDataBase();
             selectedSubject = dataBase.subjects.Find(idToFind);
+        }
+
+        public void CheckUser()
+        {
+            if(CurrentUser == User.Guest || CurrentUser == User.Teacher)
+            {
+                addSubject.Visibility = Visibility.Hidden;
+                deleteSubject.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                addSubject.Visibility = Visibility.Visible;
+                deleteSubject.Visibility = Visibility.Visible;
+            }
         }
     }
 }

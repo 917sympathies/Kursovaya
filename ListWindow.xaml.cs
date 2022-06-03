@@ -18,34 +18,38 @@ namespace Kursovaya
     /// <summary>
     /// Interaction logic for ListWindow.xaml
     /// </summary>
-    public partial class ListWindow : Window
+    public partial class ListWindow : Window, IUser
     {
-        MyDataBase dataBase;
+        private MyDataBase dataBase;
 
-        Teacher selectedTeacher;
-        Student selectedStudent;
-        //DataGridRow SelectedRow;
+        private Teacher selectedTeacher;
+        private Student selectedStudent;
 
-        AddStudentWindow addStudentWindow;
-        AddTeacherWindow addTeacherWindow;
-        TeacherInfoWindow teacherInfoWindow;
-        StudentInfoWindow studentInfoWindow;
+
+        private AddStudentWindow addStudentWindow;
+        private AddTeacherWindow addTeacherWindow;
+        private TeacherInfoWindow teacherInfoWindow;
+        private StudentInfoWindow studentInfoWindow;
 
         public ListSubject Subject { get; set; }
+        public User CurrentUser { get; set; }
 
-        public ListWindow()
+        public ListWindow(User user)
         {
             InitializeComponent();
+            CurrentUser = user;
+            CheckUser();
             dataBase = new MyDataBase();
             addStudentWindow = new AddStudentWindow();
             addTeacherWindow = new AddTeacherWindow();
         }
 
-        private void Window_Closing(object sender, CancelEventArgs e)
+        public void CheckUser()
         {
-            e.Cancel = true;
-            Hide();
-            Owner.Activate();
+            if(CurrentUser == User.Guest || CurrentUser == User.Teacher)
+            {
+                add1.Visibility = Visibility.Hidden;
+            }
         }
 
         private void FillDataGridView()
@@ -53,7 +57,7 @@ namespace Kursovaya
             if (Subject == ListSubject.Student)
             {
                 Title = "Список учеников";
-                file1.Header = "Добавить ученика";
+                add1.Header = "Добавить ученика";
                 var queue = from t in dataBase.students
                             select new
                             {
@@ -67,7 +71,7 @@ namespace Kursovaya
             else
             {
                 Title = "Список учителей";
-                file1.Header = "Добавить учителя";
+                add1.Header = "Добавить учителя";
                 var queue = from t in dataBase.teachers
                             select new
                             {
@@ -81,21 +85,13 @@ namespace Kursovaya
             }
         }
 
-        private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (IsVisible)
-            {
-                FillDataGridView();
-            }
-        }
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             addStudentWindow.Owner = this;
             addTeacherWindow.Owner = this;
         }
 
-        private void file1_Click(object sender, RoutedEventArgs e)
+        private void add1_Click(object sender, RoutedEventArgs e)
         {
             if (Subject == ListSubject.Student) addStudentWindow.Show();
             if (Subject == ListSubject.Teacher) addTeacherWindow.Show();
@@ -110,15 +106,6 @@ namespace Kursovaya
             delete1.Visibility = Visibility.Hidden;
             info1.Visibility = Visibility.Hidden;
             dgList.SelectedItem = null;
-        }
-
-        private void dgList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            //SelectedRow = ItemsControl.ContainerFromElement((DataGrid)sender,
-            //                            e.OriginalSource as DependencyObject) as DataGridRow;
-            //if (SelectedRow == null) return;
-            //delete1.Visibility = Visibility.Visible;
-            //info1.Visibility = Visibility.Visible;
         }
 
         private void UpdateList()
@@ -154,7 +141,6 @@ namespace Kursovaya
         {
             try
             {
-                //var idToDelete = int.Parse(SelectedRow.DataContext.ToString().Split(',')[0].Split(' ').Last());
                 if (Subject == ListSubject.Student)
                 {
                     dataBase.students.Remove(dataBase.students.Find(selectedStudent.Id));
@@ -173,7 +159,6 @@ namespace Kursovaya
                 MessageBox.Show(ex.InnerException.Message);
             }
             UpdateList();
-            //SelectedRow = null;
             dgList.SelectedItem = null;
             delete1.Visibility = Visibility.Hidden;
             info1.Visibility = Visibility.Hidden;
@@ -185,7 +170,6 @@ namespace Kursovaya
             int idToFind = int.Parse(dgList.SelectedItem.ToString().Split(',')[0].Split(' ').Last());
             if (Subject == ListSubject.Student) selectedStudent = dataBase.students.Find(idToFind);
             if (Subject == ListSubject.Teacher) selectedTeacher = dataBase.teachers.Include(w => w.Предметы).FirstOrDefault(w => w.Id == idToFind);
-            //MessageBox.Show(idToFind);
             if (dgList.SelectedItem == null)
             {
                 delete1.Visibility = Visibility.Hidden;
@@ -193,7 +177,7 @@ namespace Kursovaya
             }
             else
             {
-                delete1.Visibility = Visibility.Visible;
+                if(CurrentUser == User.HeadTeacher) delete1.Visibility = Visibility.Visible;
                 info1.Visibility = Visibility.Visible;
             }
         }
@@ -203,25 +187,14 @@ namespace Kursovaya
             if (Subject == ListSubject.Teacher)
             {
                 if (selectedTeacher == null) return;
-                //var smth = SelectedRow.DataContext.ToString().Split(',');
-                //var surname = smth[1].Split('=')[1].Trim();
-                //var name = smth[2].Split('=')[1].Trim();
-                //var fatherName = smth[3].Split('=')[1].Trim();
-                //var idToFind = int.Parse(SelectedRow.DataContext.ToString().Split(',')[0].Split(' ').Last());
-                //var teacher = dataBase.teachers.Include(w => w.Предметы).FirstOrDefault(w => w.Id == idToFind);
-                teacherInfoWindow = new TeacherInfoWindow(selectedTeacher);
+                teacherInfoWindow = new TeacherInfoWindow(selectedTeacher, CurrentUser);
                 teacherInfoWindow.Title = $"{selectedTeacher.Фамилия} {selectedTeacher.Имя} {selectedTeacher.Отчество}";
                 teacherInfoWindow.Show();
             }
             else
             {
                 if (selectedStudent == null) return;
-                //var smth = SelectedRow.DataContext.ToString().Split(',');
-                //var surname = smth[1].Split('=')[1].Trim();
-                //var name = smth[2].Split('=')[1].Trim();
-                //var idToFind = int.Parse(SelectedRow.DataContext.ToString().Split(',')[0].Split(' ').Last());
-                //var student = dataBase.students.Find(idToFind);
-                studentInfoWindow = new StudentInfoWindow(selectedStudent);
+                studentInfoWindow = new StudentInfoWindow(selectedStudent, CurrentUser);
                 studentInfoWindow.Owner = this;
                 var queue = from t in dataBase.subjects
                             select new
@@ -230,7 +203,6 @@ namespace Kursovaya
                                 Предмет = t.Name
                             };
                 studentInfoWindow.marksList.ItemsSource = queue.ToArray();
-                //studentInfoWindow.marksList.ItemsSource = dataBase.subjects.ToArray();
                 studentInfoWindow.Title = $"{selectedStudent.Фамилия} {selectedStudent.Имя}";
                 studentInfoWindow.Show();
             }
@@ -240,10 +212,5 @@ namespace Kursovaya
         {
             UpdateList();
         }
-    }
-    public enum ListSubject
-    {
-        Teacher,
-        Student
     }
 }

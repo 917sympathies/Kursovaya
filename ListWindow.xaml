@@ -10,18 +10,16 @@
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded"
-        Closing="Window_Closing"
-        IsVisibleChanged="Window_IsVisibleChanged" Activated="Window_Activated">
+        Activated="Window_Activated">
     <Grid>
         <DockPanel>
             <Menu DockPanel.Dock="Top" Margin="10">
                 <MenuItem x:Name="update1" Header="Обновить" Click="update1_Click"/>
-                <MenuItem x:Name="file1" Header="Добавить ученика" Click="file1_Click"/>
+                <MenuItem x:Name="add1" Header="Добавить ученика" Click="add1_Click"/>
                 <MenuItem x:Name="delete1" Header="Удалить" Visibility="Hidden" Click="delete1_Click"/>
                 <MenuItem x:Name="info1" Header="Доп.инфо" Visibility="Hidden" Click="info1_Click"/>
             </Menu>
-            <DataGrid x:Name="dgList" Margin="10" AutoGenerateColumns="True" ColumnWidth="*" CanUserAddRows="False" IsReadOnly="True"
-                      MouseDoubleClick="dgList_MouseDoubleClick" SelectionChanged="dgList_SelectionChanged">
+            <DataGrid x:Name="dgList" Margin="10" AutoGenerateColumns="True" ColumnWidth="*" CanUserAddRows="False" IsReadOnly="True" SelectionChanged="dgList_SelectionChanged">
             </DataGrid>
         </DockPanel>
     </Grid>
