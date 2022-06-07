@@ -25,23 +25,37 @@ namespace Kursovaya
         private Teacher selectedTeacher;
         private Student selectedStudent;
 
+        private Teacher loggedTeacher;
+
 
         private AddStudentWindow addStudentWindow;
         private AddTeacherWindow addTeacherWindow;
         private TeacherInfoWindow teacherInfoWindow;
         private StudentInfoWindow studentInfoWindow;
 
-        public ListSubject Subject { get; set; }
+        private ListSubject subject;
+        public ListSubject Subject { get
+            {
+                return subject;
+            }
+            set
+            {
+                subject = value;
+                FillDataGridView();
+            }
+        }
         public User CurrentUser { get; set; }
 
-        public ListWindow(User user)
+        public ListWindow(User user) : this(user, null) { }
+        public ListWindow(User user, Teacher loggedTeacher)
         {
             InitializeComponent();
             CurrentUser = user;
-            CheckUser();
+            this.loggedTeacher = loggedTeacher;
             dataBase = new MyDataBase();
             addStudentWindow = new AddStudentWindow();
             addTeacherWindow = new AddTeacherWindow();
+            CheckUser();
         }
 
         public void CheckUser()
@@ -194,15 +208,29 @@ namespace Kursovaya
             else
             {
                 if (selectedStudent == null) return;
-                studentInfoWindow = new StudentInfoWindow(selectedStudent, CurrentUser);
+                studentInfoWindow = new StudentInfoWindow(selectedStudent, CurrentUser, loggedTeacher);
                 studentInfoWindow.Owner = this;
-                var queue = from t in dataBase.subjects
-                            select new
-                            {
-                                id = t.Id,
-                                Предмет = t.Name
-                            };
-                studentInfoWindow.marksList.ItemsSource = queue.ToArray();
+                if (loggedTeacher == null)
+                {
+                    var queue = from t in dataBase.subjects
+                                select new
+                                {
+                                    id = t.Id,
+                                    Предмет = t.Name
+                                };
+                    studentInfoWindow.marksList.ItemsSource = queue.ToArray();
+                }
+                else
+                {
+                    var queue = from t in loggedTeacher.Предметы
+                                select new
+                                {
+                                    id = t.Id,
+                                    Предмет = t.Name
+                                };
+
+                    studentInfoWindow.marksList.ItemsSource = queue.ToArray();
+                }
                 studentInfoWindow.Title = $"{selectedStudent.Фамилия} {selectedStudent.Имя}";
                 studentInfoWindow.Show();
             }

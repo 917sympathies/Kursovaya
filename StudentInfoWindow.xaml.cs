@@ -21,6 +21,7 @@ namespace Kursovaya
     {
         private MyDataBase dataBase;
         private Student stud;
+        private Teacher loggedTeacher;
 
         public int Quarter1 { get; set; }
         public int Quarter2 { get; set; }
@@ -29,11 +30,13 @@ namespace Kursovaya
         public int Final { get; set; }
         public User CurrentUser { get; set; }
 
-        public StudentInfoWindow(Student student, User user)
+        public StudentInfoWindow(Student student, User user) : this(student, user, null) { }
+        public StudentInfoWindow(Student student, User user, Teacher loggedTeacher)
         {
             InitializeComponent();
             stud = student;
             CurrentUser = user;
+            this.loggedTeacher = loggedTeacher;
             dataBase = new MyDataBase();
             CheckUser();
         }
@@ -48,7 +51,7 @@ namespace Kursovaya
             else if(CurrentUser == User.Teacher)
             {
                 marksList.IsReadOnly = false;
-                giveMarks.Visibility = Visibility.Hidden;
+                giveMarks.Visibility = Visibility.Visible;
                 stopEdit.Visibility = Visibility.Visible;
             }
             else
@@ -60,7 +63,10 @@ namespace Kursovaya
         }
         private void FillDataGrid()
         {
-            for (int i = 0; i < dataBase.subjects.Count(); i++)
+            int countOfSubjects = 0;
+            if (loggedTeacher != null) countOfSubjects = loggedTeacher.Предметы.Count;
+            else countOfSubjects = dataBase.subjects.Count();
+            for (int i = 0; i < countOfSubjects; i++)
             {
                 DataGridCell idCell = GetCell(i, marksList.Columns.Count - 2);
                 TextBlock idTb = idCell.Content as TextBlock;
@@ -78,7 +84,10 @@ namespace Kursovaya
         }
         private void giveMarks_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < dataBase.subjects.Count(); i++)
+            int countOfSubjects = 0;
+            if (loggedTeacher != null) countOfSubjects = loggedTeacher.Предметы.Count;
+            else countOfSubjects = dataBase.subjects.Count();
+            for (int i = 0; i < countOfSubjects;i++)
             {
                 DataGridCell idCell = GetCell(i, marksList.Columns.Count - 2);
                 TextBlock idTb = idCell.Content as TextBlock;

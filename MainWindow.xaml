@@ -18,10 +18,11 @@
         </TabItem>
         <TabItem Header="Авторизация">
             <StackPanel>
-                <TextBlock Text="ВХОД" HorizontalAlignment="Center" Margin="30,30,30,0"></TextBlock>
+                <TextBlock Text="ВХОД" HorizontalAlignment="Center" Margin="30,10,30,0"></TextBlock>
+                <Button x:Name="logoutButton"  Margin="30,0,30,0" Content="Выйти" Visibility="Hidden" Click="logoutButton_Click"></Button>
                 <TextBox x:Name="loginTextBox" Margin="30,5,30,0" ToolTip="Введите логин"></TextBox>
                 <TextBox x:Name="passTextBox" Margin="30,5,30,0" ToolTip="Введите пароль"></TextBox>
-                <Button x:Name="loginButton" Margin="30,5,30,0" Content="Войти"></Button>
+                <Button x:Name="loginButton" Margin="30,5,30,0" Content="Войти" Click="loginButton_Click"></Button>
             </StackPanel>
         </TabItem>
     </TabControl>

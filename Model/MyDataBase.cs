@@ -15,6 +15,7 @@ namespace Kursovaya
         public virtual DbSet<Teacher> teachers { get; set; }
         public virtual DbSet<Subject> subjects { get; set; }
         public virtual DbSet<Mark> marks { get; set; }
+        public virtual DbSet<LogAndPass> logsAndPass { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder modelBuilder)
         {

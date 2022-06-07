@@ -39,6 +39,27 @@ namespace Kursovaya
                 Grid.SetRow(tx, i);
                 addTeacherGrid.Children.Add(tx);
             }
+
+            addTeacherGrid.RowDefinitions.Add(new RowDefinition());
+            TextBox tx1 = new TextBox();
+            tx1.Text = "Логин";
+            tx1.Margin = new Thickness(15, 15, 15, 15);
+            tx1.MinWidth = 20;
+            tx1.TextChanged += TextBoxTextChanged;
+            Grid.SetRow(tx1, props.Length - 1);
+            addTeacherGrid.Children.Add(tx1);
+
+
+            addTeacherGrid.RowDefinitions.Add(new RowDefinition());
+            TextBox tx2 = new TextBox();
+            tx2.Text = "Пароль";
+            tx2.Margin = new Thickness(15, 15, 15, 15);
+            tx2.MinWidth = 20;
+            tx2.TextChanged += TextBoxTextChanged;
+            Grid.SetRow(tx2, props.Length);
+            addTeacherGrid.Children.Add(tx2);
+
+
             addTeacherGrid.RowDefinitions.Add(new RowDefinition());
             Button bt = new Button();
             bt.Click += AddPerson;
@@ -50,13 +71,21 @@ namespace Kursovaya
         }
         private void AddPerson(object sender, RoutedEventArgs e)
         {
-            dataBase.teachers.Add(new Teacher
+            var newTeacher = new Teacher
             {
                 Фамилия = (addTeacherGrid.Children[0] as TextBox).Text,
                 Имя = (addTeacherGrid.Children[1] as TextBox).Text,
                 Отчество = (addTeacherGrid.Children[2] as TextBox).Text,
                 Кабинет = (addTeacherGrid.Children[3] as TextBox).Text,
-                //Предметы = new List<Subject>()
+            };
+            dataBase.teachers.Add(newTeacher);
+            dataBase.SaveChanges();
+            dataBase.logsAndPass.Add(new LogAndPass
+            {
+                IsHeadTeacher = false,
+                Login = (addTeacherGrid.Children[4] as TextBox).Text,
+                Password = (addTeacherGrid.Children[5] as TextBox).Text,
+                UserId = newTeacher.Id
             });
             dataBase.SaveChanges();
             MessageBox.Show("Вы добавили учителя!");
