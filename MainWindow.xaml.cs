@@ -30,7 +30,7 @@ namespace Kursovaya
             currentUser = User.Guest;
         }
 
-        private void button2_Click(object sender, RoutedEventArgs e)
+        private void teacherListButton_Click(object sender, RoutedEventArgs e)
         {
             lWindow = new ListWindow(currentUser);
             lWindow.Owner = this;
@@ -38,7 +38,7 @@ namespace Kursovaya
             lWindow.Show();
         }
 
-        private void button1_Click(object sender, RoutedEventArgs e)
+        private void studentListButton_Click(object sender, RoutedEventArgs e)
         {
             if (loggedTeacher == null)
                 lWindow = new ListWindow(currentUser);
@@ -61,25 +61,26 @@ namespace Kursovaya
                 MessageBox.Show("Введите логин!");
                 return;
             }
-            if(passTextBox.Text == "")
+            if(passTextBox.Password == "")
             {
                 MessageBox.Show("Введите пароль!");
                 return;
             }
-            if (loginTextBox.Text == "admin" && passTextBox.Text == "admin")
+            if (loginTextBox.Text == "admin" && passTextBox.Password == "admin")
             {
                 currentUser = User.HeadTeacher;
                 MessageBox.Show("Вы вошли как завуч!");
+                headerTextBox.Text = $"Пользователь: завуч";
                 logoutButton.Visibility = Visibility.Visible;
                 loginButton.Visibility = Visibility.Hidden;
                 loginTextBox.Visibility = Visibility.Hidden;
                 passTextBox.Visibility = Visibility.Hidden;
                 loginTextBox.Text = "";
-                passTextBox.Text = "";
+                passTextBox.Password = "";
                 return;
             }
             var dataBase = new MyDataBase();
-            var logNpass = dataBase.logsAndPass.FirstOrDefault(w => w.Login == loginTextBox.Text && w.Password == passTextBox.Text);
+            var logNpass = dataBase.logsAndPass.FirstOrDefault(w => w.Login == loginTextBox.Text && w.Password == passTextBox.Password);
             if(logNpass == null)
             {
                 MessageBox.Show("Такого пользователя нет!");
@@ -87,7 +88,7 @@ namespace Kursovaya
             }
             int userId = logNpass.UserId;
             var teacher = dataBase.teachers.Include(w => w.Предметы).FirstOrDefault(w => w.Id == userId);
-            MessageBox.Show($"Добро пожаловать {teacher.Фамилия} {teacher.Имя}!");
+            headerTextBox.Text = $"Пользователь: {teacher.Фамилия} {teacher.Имя}";
             loggedTeacher = teacher;
             currentUser = User.Teacher;
             logoutButton.Visibility = Visibility.Visible;
@@ -95,13 +96,14 @@ namespace Kursovaya
             loginTextBox.Visibility = Visibility.Hidden;
             passTextBox.Visibility = Visibility.Hidden;
             loginTextBox.Text = "";
-            passTextBox.Text = "";
+            passTextBox.Password = "";
         }
 
         private void logoutButton_Click(object sender, RoutedEventArgs e)
         {
             loggedTeacher = null;
             currentUser = User.Guest;
+            headerTextBox.Text = "ВХОД";
             logoutButton.Visibility = Visibility.Hidden;
             loginButton.Visibility = Visibility.Visible;
             loginTextBox.Visibility = Visibility.Visible;
@@ -118,10 +120,5 @@ namespace Kursovaya
     {
         Teacher,
         Student
-    }
-    public interface IUser
-    {
-        public void CheckUser();
-        public User CurrentUser { get; set; }
     }
 }

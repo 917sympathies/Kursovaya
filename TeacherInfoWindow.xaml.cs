@@ -18,19 +18,39 @@ namespace Kursovaya
     /// <summary>
     /// Interaction logic for TeacherInfoWindow.xaml
     /// </summary>
-    public partial class TeacherInfoWindow : Window, IUser
+    public partial class TeacherInfoWindow : Window
     {
         private Teacher teacher;
         private Subject selectedSubject;
         private MyDataBase dataBase;
         private SubjectsWindow subjectsWindow;
-        public User CurrentUser { get; set; }
+        private User user;
+        public User CurrentUser
+        {
+            get
+            {
+                return user;
+            }
+            set
+            {
+                user = value;
+                if (CurrentUser == User.Guest || CurrentUser == User.Teacher)
+                {
+                    addSubject.Visibility = Visibility.Hidden;
+                    deleteSubject.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    addSubject.Visibility = Visibility.Visible;
+                    deleteSubject.Visibility = Visibility.Visible;
+                }
+            }
+        }
         public TeacherInfoWindow(Teacher teacher, User user)
         {
             InitializeComponent();
             this.teacher = teacher;
             CurrentUser = user;
-            CheckUser();
             LoadSubjects();
         }
 
@@ -94,20 +114,6 @@ namespace Kursovaya
             var idToFind = int.Parse(subjectsList.SelectedItem.ToString().Split(',')[0].Split(' ').Last());
             dataBase = new MyDataBase();
             selectedSubject = dataBase.subjects.Find(idToFind);
-        }
-
-        public void CheckUser()
-        {
-            if(CurrentUser == User.Guest || CurrentUser == User.Teacher)
-            {
-                addSubject.Visibility = Visibility.Hidden;
-                deleteSubject.Visibility = Visibility.Hidden;
-            }
-            else
-            {
-                addSubject.Visibility = Visibility.Visible;
-                deleteSubject.Visibility = Visibility.Visible;
-            }
         }
     }
 }

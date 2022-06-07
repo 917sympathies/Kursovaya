@@ -17,7 +17,7 @@ namespace Kursovaya
     /// <summary>
     /// Interaction logic for StudentInfoWindow.xaml
     /// </summary>
-    public partial class StudentInfoWindow : Window, IUser
+    public partial class StudentInfoWindow : Window
     {
         private MyDataBase dataBase;
         private Student stud;
@@ -28,7 +28,37 @@ namespace Kursovaya
         public int Quarter3 { get; set; }
         public int Quarter4 { get; set; }
         public int Final { get; set; }
-        public User CurrentUser { get; set; }
+
+        private User user;
+        public User CurrentUser
+        {
+            get
+            {
+                return user;
+            }
+            set
+            {
+                user = value;
+                if (value == User.Guest)
+                {
+                    marksList.IsReadOnly = true;
+                    giveMarks.Visibility = Visibility.Hidden;
+                    stopEdit.Visibility = Visibility.Hidden;
+                }
+                else if (value == User.Teacher)
+                {
+                    marksList.IsReadOnly = false;
+                    giveMarks.Visibility = Visibility.Visible;
+                    stopEdit.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    marksList.IsReadOnly = false;
+                    giveMarks.Visibility = Visibility.Visible;
+                    stopEdit.Visibility = Visibility.Visible;
+                }
+            }
+        }
 
         public StudentInfoWindow(Student student, User user) : this(student, user, null) { }
         public StudentInfoWindow(Student student, User user, Teacher loggedTeacher)
@@ -38,28 +68,6 @@ namespace Kursovaya
             CurrentUser = user;
             this.loggedTeacher = loggedTeacher;
             dataBase = new MyDataBase();
-            CheckUser();
-        }
-        public void CheckUser()
-        {
-            if (CurrentUser == User.Guest)
-            {
-                marksList.IsReadOnly = true;
-                giveMarks.Visibility = Visibility.Hidden;
-                stopEdit.Visibility = Visibility.Hidden;
-            }
-            else if(CurrentUser == User.Teacher)
-            {
-                marksList.IsReadOnly = false;
-                giveMarks.Visibility = Visibility.Visible;
-                stopEdit.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                marksList.IsReadOnly = false;
-                giveMarks.Visibility = Visibility.Visible;
-                stopEdit.Visibility = Visibility.Visible;
-            }
         }
         private void FillDataGrid()
         {

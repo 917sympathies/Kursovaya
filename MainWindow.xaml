@@ -12,17 +12,18 @@
     <TabControl>
         <TabItem Header="Главная страница">
             <StackPanel>
-                <Button Name="button1" Content="Список учеников" Margin="30, 30, 30, 10" Click="button1_Click"/>
-                <Button Name="button2" Content="Список учителей" Margin="30, 10, 30, 10" Click="button2_Click"/>
+                <Button Name="studentListButton" Content="Список учеников" Margin="30, 30, 30, 10" Click="studentListButton_Click"/>
+                <Button Name="teacherListButton" Content="Список учителей" Margin="30, 10, 30, 10" Click="teacherListButton_Click"/>
             </StackPanel>
         </TabItem>
         <TabItem Header="Авторизация">
             <StackPanel>
-                <TextBlock Text="ВХОД" HorizontalAlignment="Center" Margin="30,10,30,0"></TextBlock>
+                <TextBlock x:Name="headerTextBox" Text="ВХОД" HorizontalAlignment="Center" Margin="30,10,30,0"></TextBlock>
                 <Button x:Name="logoutButton"  Margin="30,0,30,0" Content="Выйти" Visibility="Hidden" Click="logoutButton_Click"></Button>
                 <TextBox x:Name="loginTextBox" Margin="30,5,30,0" ToolTip="Введите логин"></TextBox>
-                <TextBox x:Name="passTextBox" Margin="30,5,30,0" ToolTip="Введите пароль"></TextBox>
-                <Button x:Name="loginButton" Margin="30,5,30,0" Content="Войти" Click="loginButton_Click"></Button>
+                <!-- <TextBox x:Name="passTextBox" Margin="30,5,30,0" ToolTip="Введите пароль"></TextBox> -->
+                <PasswordBox x:Name="passTextBox" Margin="30,5,30,0" ToolTip="Введите пароль"></PasswordBox>
+                <Button x:Name="loginButton" Margin="30,5,30,0" Content="Войти" Click="loginButton_Click" Canvas.Left="93" Canvas.Top="3"></Button>
             </StackPanel>
         </TabItem>
     </TabControl>

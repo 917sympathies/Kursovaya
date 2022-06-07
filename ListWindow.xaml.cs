@@ -18,7 +18,7 @@ namespace Kursovaya
     /// <summary>
     /// Interaction logic for ListWindow.xaml
     /// </summary>
-    public partial class ListWindow : Window, IUser
+    public partial class ListWindow : Window
     {
         private MyDataBase dataBase;
 
@@ -34,7 +34,9 @@ namespace Kursovaya
         private StudentInfoWindow studentInfoWindow;
 
         private ListSubject subject;
-        public ListSubject Subject { get
+        public ListSubject Subject
+        {
+            get
             {
                 return subject;
             }
@@ -44,26 +46,31 @@ namespace Kursovaya
                 FillDataGridView();
             }
         }
-        public User CurrentUser { get; set; }
+
+        private User user;
+        public User CurrentUser
+        {
+            get
+            {
+                return user;
+            }
+            set
+            {
+                user = value;
+                if (value == User.Guest || value == User.Teacher)
+                    add1.Visibility = Visibility.Hidden;
+            }
+        }
 
         public ListWindow(User user) : this(user, null) { }
-        public ListWindow(User user, Teacher loggedTeacher)
+        public ListWindow(User user, Teacher logTeacher)
         {
             InitializeComponent();
             CurrentUser = user;
-            this.loggedTeacher = loggedTeacher;
+            loggedTeacher = logTeacher;
             dataBase = new MyDataBase();
             addStudentWindow = new AddStudentWindow();
             addTeacherWindow = new AddTeacherWindow();
-            CheckUser();
-        }
-
-        public void CheckUser()
-        {
-            if(CurrentUser == User.Guest || CurrentUser == User.Teacher)
-            {
-                add1.Visibility = Visibility.Hidden;
-            }
         }
 
         private void FillDataGridView()
