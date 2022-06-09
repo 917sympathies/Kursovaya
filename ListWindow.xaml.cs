@@ -20,21 +20,17 @@ namespace Kursovaya
     /// </summary>
     public partial class ListWindow : Window
     {
+        private User currUser;
+        private ListSubject subject;
         private MyDataBase dataBase;
-
         private Teacher selectedTeacher;
         private Student selectedStudent;
-
         private Teacher loggedTeacher;
-
-
         private AddStudentWindow addStudentWindow;
         private AddTeacherWindow addTeacherWindow;
         private TeacherInfoWindow teacherInfoWindow;
         private StudentInfoWindow studentInfoWindow;
-
-        private ListSubject subject;
-        public ListSubject Subject
+        private ListSubject Subject
         {
             get
             {
@@ -46,29 +42,28 @@ namespace Kursovaya
                 FillDataGridView();
             }
         }
-
-        private User user;
-        public User CurrentUser
+        private User CurrentUser
         {
             get
             {
-                return user;
+                return currUser;
             }
             set
             {
-                user = value;
+                currUser = value;
                 if (value == User.Guest || value == User.Teacher)
                     add1.Visibility = Visibility.Hidden;
             }
         }
 
-        public ListWindow(User user) : this(user, null) { }
-        public ListWindow(User user, Teacher logTeacher)
+        public ListWindow(ListSubject subj, User user) : this(subj, user, null) { }
+        public ListWindow(ListSubject subj, User user, Teacher logTeacher)
         {
             InitializeComponent();
-            CurrentUser = user;
-            loggedTeacher = logTeacher;
             dataBase = new MyDataBase();
+            CurrentUser = user;
+            Subject = subj;
+            loggedTeacher = logTeacher;
             addStudentWindow = new AddStudentWindow();
             addTeacherWindow = new AddTeacherWindow();
         }

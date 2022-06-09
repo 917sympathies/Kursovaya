@@ -18,7 +18,7 @@ namespace Kursovaya
     /// </summary>
     public partial class AddStudentWindow : Window
     {
-        MyDataBase dataBase;
+        private MyDataBase dataBase;
         public AddStudentWindow()
         {
             InitializeComponent();

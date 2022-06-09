@@ -19,14 +19,13 @@ namespace Kursovaya
     /// </summary>
     public partial class SubjectsWindow : Window
     {
-        MyDataBase dataBase;
-        //TeacherInfoWindow teacherInfoWindow;
-        Teacher teacher;
+        private MyDataBase dataBase;
+        private Teacher teacher;
+
         public SubjectsWindow(Teacher teacher)
         {
             InitializeComponent();
             dataBase = new MyDataBase();
-            //teacherInfoWindow = window;
             this.teacher = teacher;
             dataBase.subjects.Load();
             addSubjectTextBox.ToolTip = "Введите название предмета и нажмите кнопку ниже, чтобы добавить предмет в общий список";
@@ -45,7 +44,6 @@ namespace Kursovaya
             Hide();
             if (Owner != null) Owner.Activate();
         }
-
         private void addSubject_Click(object sender, RoutedEventArgs e)
         {
             if (addSubjectTextBox.Text == "")
@@ -64,7 +62,6 @@ namespace Kursovaya
             subjectsList.ItemsSource = queue.ToArray();
             addSubjectTextBox.Text = "";
         }
-
         private void subjectsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             DataGridRow selectedRow = ItemsControl.ContainerFromElement((DataGrid)sender,
@@ -74,7 +71,6 @@ namespace Kursovaya
             var subj = dataBase.subjects.Find(idToFind);
             var curTeacher = dataBase.teachers.Find(teacher.Id);
             curTeacher.Предметы.Add(subj);
-            //subj.Teachers.Add(curTeacher);
             dataBase.SaveChanges();
             Close();
         }

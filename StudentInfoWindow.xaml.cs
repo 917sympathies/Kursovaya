@@ -19,26 +19,20 @@ namespace Kursovaya
     /// </summary>
     public partial class StudentInfoWindow : Window
     {
+        private User currUser;
         private MyDataBase dataBase;
         private Student stud;
         private Teacher loggedTeacher;
 
-        public int Quarter1 { get; set; }
-        public int Quarter2 { get; set; }
-        public int Quarter3 { get; set; }
-        public int Quarter4 { get; set; }
-        public int Final { get; set; }
-
-        private User user;
-        public User CurrentUser
+        private User CurrentUser
         {
             get
             {
-                return user;
+                return currUser;
             }
             set
             {
-                user = value;
+                currUser = value;
                 if (value == User.Guest)
                 {
                     marksList.IsReadOnly = true;
@@ -59,6 +53,11 @@ namespace Kursovaya
                 }
             }
         }
+        public int Quarter1 { get; set; }
+        public int Quarter2 { get; set; }
+        public int Quarter3 { get; set; }
+        public int Quarter4 { get; set; }
+        public int Final { get; set; }
 
         public StudentInfoWindow(Student student, User user) : this(student, user, null) { }
         public StudentInfoWindow(Student student, User user, Teacher loggedTeacher)
@@ -69,6 +68,7 @@ namespace Kursovaya
             this.loggedTeacher = loggedTeacher;
             dataBase = new MyDataBase();
         }
+
         private void FillDataGrid()
         {
             int countOfSubjects = 0;
@@ -121,7 +121,7 @@ namespace Kursovaya
                 DataGridCell finalMarkCell = GetCell(i, 4);
                 finalMarkCell.Content = finalMark;
             }
-            Save();
+            SaveMarks();
         }
         private void updateMarks_Click(object sender, RoutedEventArgs e)
         {
@@ -131,7 +131,7 @@ namespace Kursovaya
         {
             FillDataGrid();
         }
-        private void Save()
+        private void SaveMarks()
         {
             for (int i = 0; i < marksList.Items.Count; i++)
             {
@@ -179,7 +179,7 @@ namespace Kursovaya
         }
         private void stopEdit_Click(object sender, RoutedEventArgs e)
         {
-            Save();
+            SaveMarks();
         }
         private DataGridCell GetCell(int row, int column)
         {

@@ -20,20 +20,20 @@ namespace Kursovaya
     /// </summary>
     public partial class TeacherInfoWindow : Window
     {
+        private User currUser;
         private Teacher teacher;
         private Subject selectedSubject;
         private MyDataBase dataBase;
         private SubjectsWindow subjectsWindow;
-        private User user;
-        public User CurrentUser
+        private User CurrentUser
         {
             get
             {
-                return user;
+                return currUser;
             }
             set
             {
-                user = value;
+                currUser = value;
                 if (CurrentUser == User.Guest || CurrentUser == User.Teacher)
                 {
                     addSubject.Visibility = Visibility.Hidden;
@@ -53,7 +53,6 @@ namespace Kursovaya
             CurrentUser = user;
             LoadSubjects();
         }
-
         private void LoadSubjects()
         {
             dataBase = new MyDataBase();
@@ -67,7 +66,6 @@ namespace Kursovaya
                         };
             subjectsList.ItemsSource = queue.ToArray();
         }
-
         private void addSubject_Click(object sender, RoutedEventArgs e)
         {
             selectedSubject = null;
@@ -75,7 +73,6 @@ namespace Kursovaya
             subjectsWindow.Owner = this;
             subjectsWindow.Show();
         }
-
         private void deleteSubject_Click(object sender, RoutedEventArgs e)
         {
             if (selectedSubject == null)
@@ -102,12 +99,10 @@ namespace Kursovaya
             dataBase.SaveChanges();
             LoadSubjects();
         }
-
         private void Window_Activated(object sender, EventArgs e)
         {
             LoadSubjects();
         }
-
         private void subjectsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (subjectsList.SelectedItem == null) return;

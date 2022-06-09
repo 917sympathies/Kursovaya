@@ -21,8 +21,8 @@ namespace Kursovaya
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ListWindow lWindow;
         private User currentUser;
+        private ListWindow lWindow;
         private Teacher loggedTeacher;
         public MainWindow()
         {
@@ -32,20 +32,18 @@ namespace Kursovaya
 
         private void teacherListButton_Click(object sender, RoutedEventArgs e)
         {
-            lWindow = new ListWindow(currentUser);
+            lWindow = new ListWindow(ListSubject.Teacher, currentUser);
             lWindow.Owner = this;
-            lWindow.Subject = ListSubject.Teacher;
             lWindow.Show();
         }
 
         private void studentListButton_Click(object sender, RoutedEventArgs e)
         {
             if (loggedTeacher == null)
-                lWindow = new ListWindow(currentUser);
+                lWindow = new ListWindow(ListSubject.Student, currentUser);
             else
-                lWindow = new ListWindow(currentUser, loggedTeacher);
+                lWindow = new ListWindow(ListSubject.Student, currentUser, loggedTeacher);
             lWindow.Owner = this;
-            lWindow.Subject = ListSubject.Student;
             lWindow.Show();
         }
 
