@@ -20,13 +20,13 @@ namespace Kursovaya
     public partial class SubjectsWindow : Window
     {
         MyDataBase dataBase;
-        TeacherInfoWindow teacherInfoWindow;
+        //TeacherInfoWindow teacherInfoWindow;
         Teacher teacher;
-        public SubjectsWindow(TeacherInfoWindow window, Teacher teacher)
+        public SubjectsWindow(Teacher teacher)
         {
             InitializeComponent();
             dataBase = new MyDataBase();
-            teacherInfoWindow = window;
+            //teacherInfoWindow = window;
             this.teacher = teacher;
             dataBase.subjects.Load();
             addSubjectTextBox.ToolTip = "Введите название предмета и нажмите кнопку ниже, чтобы добавить предмет в общий список";
@@ -38,11 +38,6 @@ namespace Kursovaya
                         };
             subjectsList.ItemsSource = queue.ToArray();
         }
-
-        //public void SetWindow (TeacherInfoWindow window)
-        //{
-        //    teacherInfoWindow = window;
-        //}
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -58,7 +53,6 @@ namespace Kursovaya
                 MessageBox.Show("Введите название предмета!");
                 return;
             }
-            //dataBase.subjects.Add(new Subject { Name = addSubjectTextBox.Text, Teachers = new List<Teacher>()});
             dataBase.subjects.Add(new Subject { Name = addSubjectTextBox.Text });
             dataBase.SaveChanges();
             var queue = from t in dataBase.subjects
@@ -80,14 +74,7 @@ namespace Kursovaya
             var subj = dataBase.subjects.Find(idToFind);
             var curTeacher = dataBase.teachers.Find(teacher.Id);
             curTeacher.Предметы.Add(subj);
-            subj.Teachers.Add(curTeacher);
-            //if(curTeacher.Предметы != null)
-            //    curTeacher.Предметы.Add(subj);
-            //else
-            //{
-            //    curTeacher.Предметы = new List<Subject>();
-            //    curTeacher.Предметы.Add(subj);
-            //}
+            //subj.Teachers.Add(curTeacher);
             dataBase.SaveChanges();
             Close();
         }

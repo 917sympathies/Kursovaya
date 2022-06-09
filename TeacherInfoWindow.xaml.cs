@@ -71,7 +71,7 @@ namespace Kursovaya
         private void addSubject_Click(object sender, RoutedEventArgs e)
         {
             selectedSubject = null;
-            subjectsWindow = new SubjectsWindow(this, teacher);
+            subjectsWindow = new SubjectsWindow(teacher);
             subjectsWindow.Owner = this;
             subjectsWindow.Show();
         }

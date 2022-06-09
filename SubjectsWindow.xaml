@@ -17,9 +17,12 @@
         <DataGrid x:Name="subjectsList" Margin="10" ColumnWidth="*" CanUserAddRows="False" IsReadOnly="True" MouseDoubleClick="subjectsList_MouseDoubleClick" ScrollViewer.VerticalScrollBarVisibility="Auto" MaxHeight="150">
 
         </DataGrid>
+        <TextBlock Margin="30, 10, 30, 10" FontSize="10" HorizontalAlignment="Center" Foreground="Gray" TextWrapping="Wrap">
+            Введите название предмета и нажмите кнопку ниже, чтобы добавить предмет в общий список
+        </TextBlock>
         <TextBox x:Name="addSubjectTextBox" HorizontalAlignment="Center" Width="100"></TextBox>
         <Button x:Name="addSubject" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Center" Click="addSubject_Click">
-            Добавить предмет в общий список
+            Добавить новый предмет в общий список
         </Button>
     </StackPanel>
 </Window>
